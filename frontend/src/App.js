@@ -54,8 +54,8 @@ export default function App() {
   React.useEffect(() => {
     // Fetch gateways and areas on mount
     Promise.all([
-      fetch('http://localhost:8000/api/gateways').then(res => res.json()).catch(() => []),
-      fetch('http://localhost:8000/api/areas').then(res => res.json()).catch(() => [])
+      fetch(`${BACKEND_URL}/api/gateways`).then(res => res.json()).catch(() => []),
+      fetch(`${BACKEND_URL}/api/areas`).then(res => res.json()).catch(() => [])
     ]).then(([fetchedGateways, fetchedAreas]) => {
       if (fetchedGateways && fetchedGateways.length > 0) {
         setGateways(fetchedGateways);
@@ -104,7 +104,7 @@ export default function App() {
   const handleAddArea = useCallback((newArea) => {
     setSectors(prev => [...prev, newArea]);
 
-    fetch('http://localhost:8000/api/areas', {
+    fetch(`${BACKEND_URL}/api/areas`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(newArea)

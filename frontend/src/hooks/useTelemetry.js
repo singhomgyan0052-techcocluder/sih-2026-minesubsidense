@@ -19,7 +19,8 @@ import { classifyLink } from '../logic/linkHealth';
 import { computeRiskIndex } from '../logic/riskIndex';
 import { neighboursOf, spatialAgreement } from '../logic/corroborate';
 
-const WS_URL = process.env.REACT_APP_WS_URL || '';
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8000';
+const WS_URL = process.env.REACT_APP_WS_URL || 'ws://localhost:8000/ws';
 const MAX_RECONNECT_DELAY = 30000;
 
 /**
@@ -44,7 +45,7 @@ export function useTelemetry(scenarioKey = 'slow-subsidence') {
 
   // Fetch initial nodes on mount
   useEffect(() => {
-    fetch('http://localhost:8000/api/nodes')
+    fetch(`${BACKEND_URL}/api/nodes`)
       .then(res => res.json())
       .then(fetchedNodes => {
         if (fetchedNodes && fetchedNodes.length > 0) {
