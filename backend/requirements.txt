@@ -1,0 +1,11 @@
+fastapi
+uvicorn
+websockets
+paho-mqtt
+sqlalchemy
+psycopg2-binary
+passlib[bcrypt]
+pyjwt
+python-multipart
+pymysql
+cryptography

@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql:8.0
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: subsidence
+      MYSQL_USER: subsidence_user
+      MYSQL_PASSWORD: subsidence_pass
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    restart: always
+
+  backend:
+    build: 
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=mysql+pymysql://subsidence_user:subsidence_pass@db:3306/subsidence
+    depends_on:
+      - db
+    restart: always
+    volumes:
+      - ./backend:/app
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - WDS_SOCKET_PORT=0
+      - CHOKIDAR_USEPOLLING=true
+      - REACT_APP_BACKEND_URL=http://localhost:8000
+    depends_on:
+      - backend
+    restart: always
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+
+volumes:
+  mysql_data:
