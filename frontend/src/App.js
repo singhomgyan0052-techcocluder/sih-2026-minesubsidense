@@ -8,6 +8,7 @@ import AlertBanner from './components/AlertBanner';
 import { LoginPage } from './components/LoginPage';
 import { FleetSidebar, DetailPanel } from './components/NodeSidebar';
 import { AddAreaModal, AddNodeModal, AddGatewayModal } from './components/AddModal';
+import { HardwareIntegrationModal } from './components/HardwareModal';
 import { useTelemetry } from './hooks/useTelemetry';
 import { makeNode } from './model/nodeShape';
 import { LATENCY_BUDGET } from './model/constants';
@@ -17,6 +18,7 @@ import { playSiren, stopSiren, initAudio } from './logic/audioSiren';
 /* ============================================
    Initial Gateways
    ============================================ */
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8000';
 const INITIAL_GATEWAYS = [
   { id: 'GW-1', name: 'Primary Gateway — Central Hub', lat: 23.7485, lng: 86.4250, status: 'active' },
 ];
@@ -73,6 +75,7 @@ export default function App() {
   const [isAddGatewayOpen, setIsAddGatewayOpen] = useState(false);
   const [isAddAreaOpen, setIsAddAreaOpen] = useState(false);
   const [isAddNodeOpen, setIsAddNodeOpen] = useState(false);
+  const [isHardwareModalOpen, setIsHardwareModalOpen] = useState(false);
   const [isPickingLocation, setIsPickingLocation] = useState(false);
   const [pickedCoords, setPickedCoords] = useState({ lat: 23.7485, lng: 86.4250 });
 
@@ -91,7 +94,7 @@ export default function App() {
     setGateways(prev => [...prev, newGateway]);
     setSelectedGateway(newGateway.id);
 
-    fetch('http://localhost:8000/api/gateways', {
+    fetch(`${BACKEND_URL}/api/gateways`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(newGateway)
@@ -108,11 +111,13 @@ export default function App() {
     }).catch(err => console.log('Backend sync offline, stored locally:', err));
   }, []);
 
+
+
   const handleAddNode = useCallback((newNode) => {
     addNode(newNode);
     setSelectedNode(newNode);
 
-    fetch('http://localhost:8000/api/nodes', {
+    fetch(`${BACKEND_URL}/api/nodes`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(newNode)
@@ -354,6 +359,7 @@ export default function App() {
             onOpenAddGatewayModal={() => setIsAddGatewayOpen(true)}
             onOpenAddAreaModal={() => setIsAddAreaOpen(true)}
             onOpenAddNodeModal={() => setIsAddNodeOpen(true)}
+            onOpenHardwareModal={() => setIsHardwareModalOpen(true)}
             user={user}
             onLogout={() => setUser(null)}
           />
@@ -420,6 +426,11 @@ export default function App() {
         gateways={gateways}
         initialCoords={pickedCoords}
         onPickLocationOnMap={() => setIsPickingLocation(true)}
+      />
+
+      <HardwareIntegrationModal
+        isOpen={isHardwareModalOpen}
+        onClose={() => setIsHardwareModalOpen(false)}
       />
     </div>
   );

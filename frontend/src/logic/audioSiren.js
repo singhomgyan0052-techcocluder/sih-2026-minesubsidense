@@ -56,25 +56,19 @@ export function stopSiren() {
     sirenInterval = null;
   }
   
-  const currentOsc = oscillator;
-  const currentGain = gainNode;
-  
-  if (currentGain && audioCtx) {
-    currentGain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.1);
+  if (gainNode && audioCtx) {
+    // Ramp down to 0 quickly to avoid clicking
+    try {
+      gainNode.gain.cancelScheduledValues(audioCtx.currentTime);
+      gainNode.gain.setValueAtTime(gainNode.gain.value, audioCtx.currentTime);
+      gainNode.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.05);
+    } catch(e) {}
   }
   
-  if (currentOsc) {
-    setTimeout(() => {
-      try { 
-        if (currentOsc) {
-          currentOsc.stop();
-          currentOsc.disconnect();
-        }
-        if (currentGain) {
-          currentGain.disconnect();
-        }
-      } catch(e) {}
-    }, 150);
+  if (oscillator) {
+    try {
+      oscillator.stop(audioCtx ? audioCtx.currentTime + 0.05 : 0);
+    } catch(e) {}
   }
   
   oscillator = null;

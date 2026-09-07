@@ -213,13 +213,16 @@ export function AddNodeModal({ isOpen, onClose, onAddNode, sectors, gateways = [
   const [lat, setLat] = useState(initialCoords?.lat || 23.7957);
   const [lng, setLng] = useState(initialCoords?.lng || 86.4304);
 
-  // Sync initialCoords prop
+  // Sync initialCoords and gateways
   React.useEffect(() => {
     if (initialCoords) {
       setLat(initialCoords.lat);
       setLng(initialCoords.lng);
     }
-  }, [initialCoords]);
+    if (gateways && gateways.length > 0 && !gateways.find(g => g.id === gatewayId)) {
+      setGatewayId(gateways[gateways.length - 1].id);
+    }
+  }, [initialCoords, gateways]);
 
   if (!isOpen) return null;
 

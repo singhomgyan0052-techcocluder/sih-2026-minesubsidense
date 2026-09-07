@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import {
   X, Battery, Signal, Clock, TrendingDown, Activity, Droplets,
-  Gauge, Radio, Zap, ArrowDown, ChevronRight, Plus, Layers, Info
+  Gauge, Radio, Zap, ArrowDown, ChevronRight, Plus, Layers, Info, Filter, Wifi, Hexagon, ShieldAlert, AlertTriangle, Code
 } from 'lucide-react';
 import { TILT, HYST, VIB_RMS_G, CRACK_MM, BATTERY_PCT } from '../model/constants';
 import { formatAge } from '../logic/linkHealth';
@@ -14,7 +14,7 @@ export function FleetSidebar({
   selectedNode, onSelectNode,
   selectedGateway, onSelectGateway,
   filter, onFilterChange,
-  onOpenAddGatewayModal, onOpenAddAreaModal, onOpenAddNodeModal,
+  onOpenAddGatewayModal, onOpenAddAreaModal, onOpenAddNodeModal, onOpenHardwareModal,
   user, onLogout
 }) {
   const filteredNodes = filter === 'all'
@@ -75,6 +75,12 @@ export function FleetSidebar({
             </button>
           ))}
         </div>
+      </div>
+
+      <div style={{ padding: '0 12px 12px 12px' }}>
+        <button className="btn-secondary" style={{ width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '6px' }} onClick={onOpenHardwareModal}>
+          <Code size={14} /> Hardware Integration
+        </button>
       </div>
 
       <div className="sidebar-nodes">
