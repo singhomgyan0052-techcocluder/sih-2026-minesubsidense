@@ -12,6 +12,14 @@ from .auth import verify_password, get_password_hash, create_access_token, ACCES
 from .ws_manager import manager
 from .mqtt_client import start_mqtt_client
 
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+try:
+    from ai.lstm_predictor import predict_failure_risk
+except ImportError:
+    pass
+
 # Set up logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -118,6 +126,13 @@ def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(), db:
 def get_nodes(db: Session = Depends(get_db)):
     nodes = db.query(Node).all()
     return nodes
+
+@app.get("/api/nodes/{node_id}/ai_risk")
+def get_node_ai_risk(node_id: str):
+    try:
+        return predict_failure_risk(node_id)
+    except Exception as e:
+        return {"error": str(e), "ai_risk_probability": 0}
 
 @app.post("/api/nodes")
 def create_node(node_data: dict = Body(...), db: Session = Depends(get_db)):

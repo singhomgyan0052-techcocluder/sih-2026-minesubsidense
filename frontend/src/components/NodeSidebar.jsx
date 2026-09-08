@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   X, Battery, Signal, Clock, TrendingDown, Activity, Droplets,
-  Gauge, Radio, Zap, ArrowDown, ChevronRight, Plus, Layers, Info, Filter, Wifi, Hexagon, ShieldAlert, AlertTriangle, Code
+  Gauge, Radio, Zap, ArrowDown, ChevronRight, Plus, Layers, Info, Filter, Wifi, Hexagon, ShieldAlert, AlertTriangle, Code, Cpu
 } from 'lucide-react';
 import { TILT, HYST, VIB_RMS_G, CRACK_MM, BATTERY_PCT } from '../model/constants';
 import { formatAge } from '../logic/linkHealth';
@@ -228,6 +228,24 @@ export function FleetSidebar({
 /* ========== Right Detail Panel ========== */
 export function DetailPanel({ node, onClose, alerts = [] }) {
   const [showRiskBreakdown, setShowRiskBreakdown] = useState(false);
+  const [aiRisk, setAiRisk] = useState(null);
+  const [loadingAi, setLoadingAi] = useState(false);
+
+  useEffect(() => {
+    if (node) {
+      setLoadingAi(true);
+      fetch(`${process.env.REACT_APP_BACKEND_URL || 'http://localhost:8000'}/api/nodes/${node.id}/ai_risk`)
+        .then(res => res.json())
+        .then(data => {
+          setAiRisk(data);
+          setLoadingAi(false);
+        })
+        .catch(err => {
+          console.error("Failed to fetch AI risk:", err);
+          setLoadingAi(false);
+        });
+    }
+  }, [node]);
 
   if (!node) return null;
 
