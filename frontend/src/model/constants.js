@@ -16,16 +16,16 @@ export const mmPerMToDeg = (mm) => mm * DEG_PER_MM_PER_M;
  *  [VERIFY] against NCB Subsidence Engineers' Handbook / CSIR-CIMFR guidance
  *  before quoting these to evaluators. Indicative only. */
 export const TILT = {
-  NORMAL_MAX:  2.0,   // [VERIFY]
-  WARN_MAX:    5.0,   // [VERIFY]
-  CRITICAL_AT: 5.0,   // [VERIFY]  above this = critical band
+  NORMAL_MAX:  8.0,   // [VERIFY]
+  WARN_MAX:    10.0,   // [VERIFY]
+  CRITICAL_AT: 20.0,   // [VERIFY]  above this = critical band
 };
 
 /** Hysteresis: enter on the high value, leave only on the low value.
  *  Prevents an alert flickering on/off around a single threshold. */
 export const HYST = {
-  WARN_ENTER: 2.0, WARN_EXIT: 1.6,       // [VERIFY]
-  CRIT_ENTER: 5.0, CRIT_EXIT: 4.0,       // [VERIFY]
+  WARN_ENTER: 10.0, WARN_EXIT: 8.0,       // [VERIFY]
+  CRIT_ENTER: 20.0, CRIT_EXIT: 16.0,       // [VERIFY]
 };
 
 /** Other sensor thresholds. [VERIFY] all of these. */
