@@ -32,7 +32,15 @@ export function computeRiskIndex(node) {
   const crackContrib = crackNorm * (RISK_WEIGHTS.crack || 0.25) * 100;
   const settlContrib = settlNorm * (RISK_WEIGHTS.settlement || 0.2) * 100;
 
-  const index = Math.round(tiltContrib + vibContrib + crackContrib + settlContrib);
+  let index = Math.round(tiltContrib + vibContrib + crackContrib + settlContrib);
+
+  if (node.status === 'CRITICAL' && index < 75) {
+    index = Math.max(index, 80);
+  } else if (node.status === 'WARNING' && index < 40) {
+    index = Math.max(index, 50);
+  } else if (node.status === 'DRIFT' && index < 20) {
+    index = Math.max(index, 25);
+  }
 
   return {
     index,
