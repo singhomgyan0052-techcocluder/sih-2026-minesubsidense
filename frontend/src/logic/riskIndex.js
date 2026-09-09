@@ -34,12 +34,13 @@ export function computeRiskIndex(node) {
 
   let index = Math.round(tiltContrib + vibContrib + crackContrib + settlContrib);
 
-  if (node.status === 'CRITICAL' && index < 75) {
+  // Fallback map: force UI risk circle color if rule-engine marks it worse
+  if (node.status === 'critical' && index < 75) {
     index = Math.max(index, 80);
-  } else if (node.status === 'WARNING' && index < 40) {
+  } else if (node.status === 'warning' && index < 40) {
     index = Math.max(index, 50);
-  } else if (node.status === 'DRIFT' && index < 20) {
-    index = Math.max(index, 25);
+  } else if (node.status === 'stale' || node.status === 'suspect') {
+    // Optionally don't force index on stale
   }
 
   return {
