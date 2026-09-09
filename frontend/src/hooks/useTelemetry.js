@@ -20,7 +20,12 @@ import { computeRiskIndex } from '../logic/riskIndex';
 import { neighboursOf, spatialAgreement } from '../logic/corroborate';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8000';
-const WS_URL = process.env.REACT_APP_WS_URL || 'ws://localhost:8000/ws';
+let WS_URL = process.env.REACT_APP_WS_URL;
+if (!WS_URL && BACKEND_URL) {
+  WS_URL = BACKEND_URL.replace(/^http/, 'ws') + '/ws/telemetry';
+} else if (!WS_URL) {
+  WS_URL = 'ws://localhost:8000/ws/telemetry';
+}
 const MAX_RECONNECT_DELAY = 30000;
 
 /**
