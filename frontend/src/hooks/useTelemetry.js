@@ -69,10 +69,13 @@ export function useTelemetry(scenarioKey = 'slow-subsidence') {
           });
           setNodes(processedNodes);
         } else {
-          setNodes(SEED_NODES);
+          setNodes([]);
         }
       })
-      .catch(() => setNodes(SEED_NODES));
+      .catch(err => {
+        console.error('Failed to fetch initial nodes:', err);
+        setNodes([]);
+      });
   }, []);
   const [lastPacketAt, setLastPacketAt] = useState(null);
   const [reconnectAttempts, setReconnectAttempts] = useState(0);
@@ -207,7 +210,7 @@ export function useTelemetry(scenarioKey = 'slow-subsidence') {
   // Try WebSocket connection
   const tryWebSocket = useCallback(() => {
     if (!WS_URL) {
-      startSimulator();
+      console.warn("No WS_URL found. WebSocket won't connect.");
       return;
     }
 
@@ -286,16 +289,11 @@ export function useTelemetry(scenarioKey = 'slow-subsidence') {
           // Exponential backoff: 1s, 2s, 4s, ... capped at 30s
           const delay = Math.min(1000 * Math.pow(2, attempt - 1), MAX_RECONNECT_DELAY);
 
-          // Fall back to simulator while reconnecting
-          if (!intervalRef.current) {
-            startSimulator();
-          }
-
           setTimeout(connect, delay);
         };
       } catch (err) {
-        // WebSocket constructor failed — go to simulator
-        startSimulator();
+        // WebSocket constructor failed — keep trying
+        setTimeout(connect, 5000);
       }
     };
 
