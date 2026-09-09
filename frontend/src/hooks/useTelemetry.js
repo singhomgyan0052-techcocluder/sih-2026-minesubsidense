@@ -55,11 +55,18 @@ export function useTelemetry(scenarioKey = 'slow-subsidence') {
       .then(fetchedNodes => {
         if (fetchedNodes && fetchedNodes.length > 0) {
           // Merge fetched node fields with default shape
-          const processedNodes = fetchedNodes.map(n => ({
-            ...makeNode(n.id, n.lat, n.lng, n.name),
-            ...n,
-            last_seen: Date.now()
-          }));
+          const processedNodes = fetchedNodes.map(n => {
+            const validOverrides = {};
+            Object.keys(n).forEach(key => {
+              if (n[key] !== null && n[key] !== undefined) {
+                validOverrides[key] = n[key];
+              }
+            });
+            return {
+              ...makeNode(validOverrides),
+              last_seen: Date.now()
+            };
+          });
           setNodes(processedNodes);
         } else {
           setNodes(SEED_NODES);
