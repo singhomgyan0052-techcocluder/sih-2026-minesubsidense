@@ -1,6 +1,5 @@
 let audioCtx = null;
-let oscillator = null;
-let gainNode = null;
+let activeNodes = [];
 let sirenInterval = null;
 let isPlaying = false;
 
@@ -15,63 +14,72 @@ export function initAudio() {
 
 export function playSiren() {
   if (isPlaying) return;
+  isPlaying = true;
+  
   try {
     initAudio();
     
-    oscillator = audioCtx.createOscillator();
-    gainNode = audioCtx.createGain();
+    const osc = audioCtx.createOscillator();
+    const gainNode = audioCtx.createGain();
     
-    oscillator.type = 'sawtooth';
+    // 'square' wave is much harsher and louder
+    osc.type = 'square';
     
     gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
-    gainNode.gain.linearRampToValueAtTime(0.15, audioCtx.currentTime + 0.05);
+    gainNode.gain.linearRampToValueAtTime(0.2, audioCtx.currentTime + 0.1);
     
-    oscillator.connect(gainNode);
+    osc.connect(gainNode);
     gainNode.connect(audioCtx.destination);
     
-    oscillator.start();
-    isPlaying = true;
+    osc.start();
     
-    let up = true;
+    activeNodes.push({ osc, gainNode });
+    
+    let phase = 0;
     sirenInterval = setInterval(() => {
-      if (!audioCtx || !oscillator) return;
-      if (up) {
-         oscillator.frequency.setValueAtTime(500, audioCtx.currentTime);
-         oscillator.frequency.linearRampToValueAtTime(1200, audioCtx.currentTime + 0.35);
+      if (!audioCtx || !osc) return;
+      
+      const now = audioCtx.currentTime;
+      if (phase % 2 === 0) {
+        // Intense escalating sweep up
+        osc.frequency.setValueAtTime(600, now);
+        osc.frequency.exponentialRampToValueAtTime(1500, now + 0.8);
       } else {
-         oscillator.frequency.setValueAtTime(1200, audioCtx.currentTime);
-         oscillator.frequency.linearRampToValueAtTime(500, audioCtx.currentTime + 0.35);
+        // Fast sweep down
+        osc.frequency.setValueAtTime(1500, now);
+        osc.frequency.exponentialRampToValueAtTime(600, now + 0.4);
       }
-      up = !up;
-    }, 400);
+      phase++;
+    }, 1200);
   } catch(e) {
     console.error("Audio Context failed", e);
+    isPlaying = false;
   }
 }
 
 export function stopSiren() {
-  if (!isPlaying) return;
+  isPlaying = false;
+  
   if (sirenInterval) {
     clearInterval(sirenInterval);
     sirenInterval = null;
   }
   
-  if (gainNode && audioCtx) {
-    // Ramp down to 0 quickly to avoid clicking
-    try {
-      gainNode.gain.cancelScheduledValues(audioCtx.currentTime);
-      gainNode.gain.setValueAtTime(gainNode.gain.value, audioCtx.currentTime);
-      gainNode.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.05);
-    } catch(e) {}
-  }
+  // Clean up ALL running oscillators to avoid memory/audio leaks
+  activeNodes.forEach(node => {
+    if (node.gainNode && audioCtx) {
+      try {
+        node.gainNode.gain.cancelScheduledValues(audioCtx.currentTime);
+        node.gainNode.gain.setValueAtTime(node.gainNode.gain.value, audioCtx.currentTime);
+        node.gainNode.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.1);
+      } catch(e) {}
+    }
+    if (node.osc) {
+      try {
+        node.osc.stop(audioCtx ? audioCtx.currentTime + 0.1 : 0);
+      } catch(e) {}
+    }
+  });
   
-  if (oscillator) {
-    try {
-      oscillator.stop(audioCtx ? audioCtx.currentTime + 0.05 : 0);
-    } catch(e) {}
-  }
-  
-  oscillator = null;
-  gainNode = null;
-  isPlaying = false;
+  activeNodes = [];
 }
