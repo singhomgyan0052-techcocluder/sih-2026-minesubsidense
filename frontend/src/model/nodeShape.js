@@ -262,8 +262,8 @@ export const SEED_NODES = [
     last_seen: now,
     settlement_inferred_mm: -14.2,  // chain: ref → … → 004 → 003
     settlement_err_mm: 3.5,
-    rule_level: 'warning',
-    status: 'warning',
+    rule_level: 'normal',
+    status: 'normal',
     risk_index: 62,
     trend_mm_per_m_per_day: 0.35,
     spatial_agreement: { agree: 3, of: 4, r2: 0.88 },
@@ -354,8 +354,8 @@ export const SEED_NODES = [
     last_seen: now,
     settlement_inferred_mm: -23.6,  // chain: … → 003 → 006
     settlement_err_mm: 4.0,
-    rule_level: 'warning',
-    status: 'warning',
+    rule_level: 'normal',
+    status: 'normal',
     risk_index: 68,
     trend_mm_per_m_per_day: 0.42,
     spatial_agreement: { agree: 3, of: 4, r2: 0.91 },
@@ -385,8 +385,8 @@ export const SEED_NODES = [
     last_seen: now,
     settlement_inferred_mm: -30.8,  // chain: … → 006 → 007
     settlement_err_mm: 4.8,
-    rule_level: 'critical',
-    status: 'warning',  // single node alone → WARNING, not CRITICAL (§3.6)
+    rule_level: 'normal',
+    status: 'normal',  // single node alone → WARNING, not CRITICAL (§3.6)
     risk_index: 85,
     trend_mm_per_m_per_day: 0.58,
     spatial_agreement: { agree: 3, of: 4, r2: 0.90 },
