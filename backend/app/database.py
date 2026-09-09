@@ -17,7 +17,9 @@ DATABASE_URL = os.getenv("DATABASE_URL", DEFAULT_MYSQL_URL)
 
 def get_engine():
     global DATABASE_URL
-    if DATABASE_URL.startswith("mysql://"):
+    if DATABASE_URL.startswith("postgres://"):
+        DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
+    elif DATABASE_URL.startswith("mysql://"):
         DATABASE_URL = DATABASE_URL.replace("mysql://", "mysql+pymysql://", 1)
 
     connect_args = {"check_same_thread": False} if DATABASE_URL.startswith("sqlite") else {}
