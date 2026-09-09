@@ -68,7 +68,17 @@ export default function App() {
   const [filter, setFilter] = useState('all');
   const [clock, setClock] = useState(new Date());
   const [showSettlementInfo, setShowSettlementInfo] = useState(false);
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(() => {
+    const saved = localStorage.getItem('user_data');
+    if (saved) {
+      try {
+        return JSON.parse(saved);
+      } catch (e) {
+        return null;
+      }
+    }
+    return null;
+  });
   const [isSirenMuted, setIsSirenMuted] = useState(false);
 
   // Modal states
@@ -317,7 +327,12 @@ export default function App() {
                   <div className="profile-menu-divider" />
                   <button
                     className="profile-menu-item"
-                    onClick={() => { setShowProfileMenu(false); setUser(null); }}
+                    onClick={() => { 
+                      setShowProfileMenu(false); 
+                      setUser(null); 
+                      localStorage.removeItem('user_data');
+                      localStorage.removeItem('token');
+                    }}
                   >
                     <LogOut size={14} />
                     Sign out

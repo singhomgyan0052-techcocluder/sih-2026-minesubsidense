@@ -140,12 +140,14 @@ export function LoginPage({ onLogin }) {
       localStorage.setItem('token', token);
       
       const payload = parseJwt(token) || {};
-      onLogin({
+      const userData = {
         username: payload.sub || username,
         name: payload.name || fullName || 'Officer',
         role: payload.role || 'Officer',
         avatar: 'https://i.pravatar.cc/150?u=' + (payload.sub || 'sharma'),
-      });
+      };
+      localStorage.setItem('user_data', JSON.stringify(userData));
+      onLogin(userData);
     } catch (err) {
       setError(err.message || 'Authentication failed');
     } finally {
