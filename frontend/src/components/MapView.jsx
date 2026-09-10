@@ -346,27 +346,38 @@ export default function MapView({
           const isCritical = node.status === 'critical';
 
           return (
-            <CircleMarker
-              key={node.id}
-              center={[node.lat, node.lng]}
-              radius={isSelected ? 8 : isCritical ? 7 : 5}
-              pathOptions={{
-                color: 'white',
-                weight: isSelected ? 2.5 : 1.5,
-                fillColor: color,
-                fillOpacity: 0.9,
-              }}
-              eventHandlers={{
-                click: (e) => {
-                  if (e.originalEvent) {
-                    e.originalEvent.stopPropagation();
-                  }
-                  setClickLocation(null);
-                  onSelectNode(node);
-                },
-              }}
-            >
-              <Popup>
+            <React.Fragment key={`frag-${node.id}`}>
+              {isCritical && (
+                <CircleMarker
+                  center={[node.lat, node.lng]}
+                  radius={25}
+                  pathOptions={{
+                    className: 'critical-area-pulse',
+                    interactive: false // Don't block clicks to the main marker
+                  }}
+                />
+              )}
+              <CircleMarker
+                key={node.id}
+                center={[node.lat, node.lng]}
+                radius={isSelected ? 8 : isCritical ? 7 : 5}
+                pathOptions={{
+                  color: 'white',
+                  weight: isSelected ? 2.5 : 1.5,
+                  fillColor: color,
+                  fillOpacity: 0.9,
+                }}
+                eventHandlers={{
+                  click: (e) => {
+                    if (e.originalEvent) {
+                      e.originalEvent.stopPropagation();
+                    }
+                    setClickLocation(null);
+                    onSelectNode(node);
+                  },
+                }}
+              >
+                <Popup>
                 <div style={{
                   fontFamily: "'Inter', sans-serif",
                   color: '#f1f5f9',
@@ -428,6 +439,7 @@ export default function MapView({
                 </div>
               </Popup>
             </CircleMarker>
+            </React.Fragment>
           );
         })}
       </MapContainer>
