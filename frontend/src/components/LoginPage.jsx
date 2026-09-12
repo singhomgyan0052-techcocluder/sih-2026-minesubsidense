@@ -195,7 +195,22 @@ export function LoginPage({ onLogin }) {
           {/* Header */}
           <div className="login-card-header">
             <div className="login-shield">
-              <ShieldCheck size={28} />
+              <svg viewBox="0 0 40 40" width="32" height="32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20 3L5 10v10c0 9.5 6.4 18.4 15 20.5 8.6-2.1 15-11 15-20.5V10L20 3z" 
+                  fill="url(#loginShieldGrad)" stroke="rgba(6,182,212,0.4)" strokeWidth="0.8"/>
+                <path d="M10 22 L14 22 L16 16 L18 28 L20 14 L22 26 L24 18 L26 22 L30 22" 
+                  stroke="#38bdf8" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+                <path d="M16 32 L20 28 L24 32" stroke="rgba(255,255,255,0.5)" strokeWidth="1" strokeLinecap="round" fill="none"/>
+                <path d="M17 11a4 4 0 016 0" stroke="rgba(255,255,255,0.6)" strokeWidth="0.8" fill="none"/>
+                <path d="M15 9a7 7 0 0110 0" stroke="rgba(255,255,255,0.35)" strokeWidth="0.8" fill="none"/>
+                <circle cx="20" cy="13" r="1.2" fill="white"/>
+                <defs>
+                  <linearGradient id="loginShieldGrad" x1="5" y1="3" x2="35" y2="40" gradientUnits="userSpaceOnUse">
+                    <stop offset="0%" stopColor="rgba(59,130,246,0.3)"/>
+                    <stop offset="100%" stopColor="rgba(6,182,212,0.2)"/>
+                  </linearGradient>
+                </defs>
+              </svg>
             </div>
             <h2>{isSignUp ? 'Officer Registration' : 'SWARN'}</h2>
             <p className="login-subtitle">AI Powered Adaptive Mine Subsidence Monitoring Framework</p>

@@ -210,10 +210,26 @@ export default function App() {
       <header className="app-header">
         <div className="header-brand">
           <div className="header-logo">
-            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M12 2L2 7l10 5 10-5-10-5z"/>
-              <path d="M2 17l10 5 10-5"/>
-              <path d="M2 12l10 5 10-5"/>
+            <svg viewBox="0 0 40 40" width="24" height="24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              {/* Shield outline */}
+              <path d="M20 3L5 10v10c0 9.5 6.4 18.4 15 20.5 8.6-2.1 15-11 15-20.5V10L20 3z" 
+                fill="url(#shieldGrad)" stroke="rgba(255,255,255,0.3)" strokeWidth="0.8"/>
+              {/* Seismic wave — represents subsidence detection */}
+              <path d="M10 22 L14 22 L16 16 L18 28 L20 14 L22 26 L24 18 L26 22 L30 22" 
+                stroke="#38bdf8" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+              {/* Ground crack lines */}
+              <path d="M16 32 L20 28 L24 32" stroke="rgba(255,255,255,0.5)" strokeWidth="1" strokeLinecap="round" fill="none"/>
+              {/* Wi-Fi/signal arcs — IoT mesh */}
+              <path d="M17 11a4 4 0 016 0" stroke="rgba(255,255,255,0.6)" strokeWidth="0.8" fill="none"/>
+              <path d="M15 9a7 7 0 0110 0" stroke="rgba(255,255,255,0.35)" strokeWidth="0.8" fill="none"/>
+              {/* Center dot — sensor node */}
+              <circle cx="20" cy="13" r="1.2" fill="white"/>
+              <defs>
+                <linearGradient id="shieldGrad" x1="5" y1="3" x2="35" y2="40" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stopColor="#3b82f6"/>
+                  <stop offset="100%" stopColor="#06b6d4"/>
+                </linearGradient>
+              </defs>
             </svg>
           </div>
           <div>
