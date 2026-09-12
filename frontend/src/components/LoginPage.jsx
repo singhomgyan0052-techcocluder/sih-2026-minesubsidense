@@ -183,7 +183,7 @@ export function LoginPage({ onLogin }) {
                     <button className="login-dots-item" onClick={() => { setShowDots(false); alert('Contact Admin: admin@sih26025.gov.in'); }}>
                       Contact Admin
                     </button>
-                    <button className="login-dots-item" onClick={() => { setShowDots(false); alert('Version 1.0.0 — SIH 26025'); }}>
+                    <button className="login-dots-item" onClick={() => { setShowDots(false); alert('SWARN v1.0.0 — AI Powered Adaptive Mine Subsidence Monitoring Framework'); }}>
                       About
                     </button>
                   </div>
@@ -197,8 +197,8 @@ export function LoginPage({ onLogin }) {
             <div className="login-shield">
               <ShieldCheck size={28} />
             </div>
-            <h2>{isSignUp ? 'Officer Registration' : 'Mine Subsidence Monitor'}</h2>
-            <p className="login-subtitle">SIH 26025 — Secure Officer Portal</p>
+            <h2>{isSignUp ? 'Officer Registration' : 'SWARN'}</h2>
+            <p className="login-subtitle">AI Powered Adaptive Mine Subsidence Monitoring Framework</p>
           </div>
 
           {/* Form */}

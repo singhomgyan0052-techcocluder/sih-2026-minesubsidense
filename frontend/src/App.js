@@ -217,8 +217,8 @@ export default function App() {
             </svg>
           </div>
           <div>
-            <div className="header-title">Mine Subsidence Monitor</div>
-            <div className="header-subtitle">SIH 26025 &mdash; Jharia Coalfield</div>
+            <div className="header-title">SWARN</div>
+            <div className="header-subtitle">AI Powered Adaptive Mine Subsidence Monitoring Framework</div>
           </div>
         </div>
 
