@@ -9,7 +9,7 @@ import asyncio
 
 logger = logging.getLogger(__name__)
 
-MQTT_BROKER = "broker.emqx.io"
+MQTT_BROKER = "broker.hivemq.com"
 MQTT_PORT = 1883
 MQTT_TOPIC = "subsidence/telemetry/#"
 
